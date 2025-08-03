@@ -1,0 +1,62 @@
+<script>
+        const chatContent = document.getElementById("chat-content");
+        const chatForm = document.getElementById("chat-form");
+        const userInput = document.getElementById("user-input");
+
+        function createMessageElement(message, fromUser) {
+            const messageElement = document.createElement("div");
+            messageElement.classList.add("max-w-md", "break-words", "px-4", "py-2", "rounded-full");
+            messageElement.classList.add(fromUser ? "bg-blue-500" : "bg-white");
+            messageElement.classList.add(fromUser ? "text-white" : "text-gray-800");
+            messageElement.classList.add(fromUser ? "ml-auto" : "mr-auto");
+            messageElement.textContent = message;
+
+            return messageElement;
+        }
+
+        async function fetchResponse(userMessage) {
+            try {
+                const response = await fetch("https://backend.buildpicoapps.com/aero/run/llm-api?pk=v1-Z0FBQUFBQm5IZkJDMlNyYUVUTjIyZVN3UWFNX3BFTU85SWpCM2NUMUk3T2dxejhLSzBhNWNMMXNzZlp3c09BSTR6YW1Sc1BmdGNTVk1GY0liT1RoWDZZX1lNZlZ0Z1dqd3c9PQ==", {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        prompt: userMessage
+                    })
+                });
+
+                if (!response.ok) {
+                    console.error("Error:", response.statusText);
+                    return "There was an error. Please try again later.";
+                }
+
+                const data = await response.json();
+
+                if (data.status === "success") {
+                    return data.text;
+                } else {
+                    console.error("Error:", data);
+                    return "There was an error. Please try again later.";
+                }
+            } catch (error) {
+                console.error("Error:", error);
+                return "There was an error. Please try again later.";
+            }
+        }
+
+        chatForm.addEventListener("submit", async (event) => {
+            event.preventDefault();
+
+            const userMessage = userInput.value.trim();
+            if (!userMessage) {
+                return;
+            }
+
+            chatContent.appendChild(createMessageElement(userMessage, true));
+            userInput.value = "";
+
+            const botResponse = await fetchResponse(userMessage);
+            chatContent.appendChild(createMessageElement(botResponse, false));
+        });
+    </script>
