@@ -13,6 +13,10 @@ A simple web-based chat assistant built with HTML, CSS, and JavaScript. This app
   - Responsive layout that adjusts to different screen sizes.
   - Dark and light mode styling for better user experience.
 
+<img width="1366" height="768" alt="image" src="https://github.com/user-attachments/assets/cf2e8356-70f2-499d-b80e-48f4f9535b3c" />
+ 
+
+
 - **Chat Functionality**:
   - Users can type messages in an input field and send them using the "Send" button.
   - Messages from the user and the assistant are visually differentiated with distinct styles.
